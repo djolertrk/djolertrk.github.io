@@ -1,5 +1,3 @@
-Here you can say lots of fun things about your site.
+This helps me to archive some useful tips/commands etc., that I've learned.
 
-Maybe say a some things about yourself.
-
-Or maybe what you plan to blog about.
+It may be useful to you as well.
