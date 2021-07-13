@@ -29,21 +29,21 @@ After the build process is done, the ~/gdb-report-bugs.json file will contain al
 
     $ llvm-original-di-preservation.py ~/gdb-report-bugs.json before-the-fix.html
 
-The HTML can be found at: https://djolertrk.github.io/di-check-before-adce-fix/.
+The HTML can be found at [Debug Info Issues Before The Compiler Fix](https://djolertrk.github.io/di-check-before-adce-fix/).
 
-After the analysis of some “Variable Location” issues, I’ve found out that the Aggressive Dead Code Elimination Pass (ADCE) drops some variable location information (more precisely, the variable “vendor” from the bfd/elf-attrs.c). After some investigation within the compiler, I’ve come up with the patch [5] that fixes that problem. The new HTML page, generated from the JSON file produced from the fixed version of the compiler, shows a reduced number of Debug Info related issues: https://djolertrk.github.io/di-check-after-adce-fix/.
+After the analysis of some “Variable Location” issues, I’ve found out that the Aggressive Dead Code Elimination Pass (ADCE) drops some variable location information (more precisely, the variable “vendor” from the bfd/elf-attrs.c). After some investigation within the compiler, I’ve come up with the patch [5] that fixes that problem. The new HTML page, generated from the JSON file produced from the fixed version of the compiler, shows a reduced number of Debug Info related issues [Debug Info Issues After The Compiler Fix](https://djolertrk.github.io/di-check-after-adce-fix/).
 
 If you find this useful, please run these options on your build, and please do share your impressions.
 
-[0] https://llvm.org/
+[0] [LLVM](https://llvm.org/)
 
-[1] http://dwarfstd.org/
+[1] [DWARF](http://dwarfstd.org/)
 
-[2] https://llvm.org/docs/SourceLevelDebugging.html#llvm-dbg-value
+[2] [llvm-dbg-value](https://llvm.org/docs/SourceLevelDebugging.html#llvm-dbg-value)
 
-[3] https://llvm.org/docs/HowToUpdateDebugInfo.html
+[3] [HowToUpdateDebugInfo](https://llvm.org/docs/HowToUpdateDebugInfo.html)
 
-[4] https://llvm.org/docs/HowToUpdateDebugInfo.html#test-original-debug-info-preservation-in-optimizations
+[4] [test-original-debug-info-preservation-in-optimizations](https://llvm.org/docs/HowToUpdateDebugInfo.html#test-original-debug-info-preservation-in-optimizations)
 
-[5] https://reviews.llvm.org/D100844
+[5] [LLVM Fix](https://reviews.llvm.org/D100844)
 
