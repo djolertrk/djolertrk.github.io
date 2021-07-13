@@ -18,7 +18,7 @@ I might be a bit selfish, but whenever I am testing a change in the LLVM compile
 
 For now, the [4] can found issues with dropping the line, column mapping (within LLVM, it is called Location) between source code and corresponding LLVM instructions, and issues with dropping variables values/locations (please do note that there is a term Variable Location as well). There is an idea for finding issues for more kinds of the Debug Info. Also, we are seeing some false positives at the moment, but there are some ideas on how to improve it. Anyhow, please find the steps below on how to use it.
 
-First, I am using the GNU GDB 7.11 for this experiment, from https://www.gnu.org/software/gdb/.
+First, I am using the GNU GDB 7.11 for this experiment, from [[https://www.gnu.org/software/gdb/]].
 Also, I will set up a path to a JSON file that will be used by the compiler for writing down the issues that have been found. The JSON file will be translated (by the script from llvm-project/utils/) into the HTML page, with tables that contain info about the file, LLVM Pass, etc., where the Debug Info issue has been found.
 
     $ mkdir build && cd build
