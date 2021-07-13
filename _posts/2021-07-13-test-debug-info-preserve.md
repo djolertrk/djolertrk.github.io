@@ -19,7 +19,7 @@ I might be a bit selfish, but whenever I am testing a change in the LLVM compile
 For now, the [4] can find issues with dropping the line, column mapping (within LLVM, it is called Location) between source code and corresponding LLVM instructions, and issues with dropping variables values/locations (please do note that there is a term Variable Location as well). There is an idea for finding issues for more kinds of the Debug Info. Also, we are seeing some false positives at the moment, but there are some ideas on how to improve it. Anyhow, please find the steps below on how to use it.
 
 First, I am using the GNU GDB 7.11 for this experiment, from [GNU GDB 7.11](https://www.gnu.org/software/gdb/).
-Also, I will set up a path to a JSON file that will be used by the compiler for writing down the issues that have been found. The JSON file will be translated (by the script from llvm-project/utils/) into the HTML page, with tables that contain info about the file, LLVM Pass, etc., where the Debug Info issue has been found.
+Also, I will set up a path to a JSON file that will be used by the compiler for writing down the issues that have been found. The JSON file will be translated (by the script from llvm-project/llvm/utils/) into the HTML page, with tables that contain info about the file, LLVM Pass, etc., where the Debug Info issue has been found.
 
     $ mkdir build && cd build
     $ ../gdb-source/configure CC=$PATH_TO_LLVM_BUILD/bin/clang CXX=$PATH_TO_LLVM_BUILD/bin/clang++ CFLAGS="-g -O2 -Wno-error -Xclang -fverify-debuginfo-preserve -Xclang -fverify-debuginfo-preserve-export=~/gdb-report-bugs.json" CXXFLAGS="-g -O2 -Wno-error -Xclang -fverify-debuginfo-preserve -Xclang -fverify-debuginfo-preserve-export=~/gdb-report-bugs.json" --enable-werror=no
