@@ -28,6 +28,7 @@ Also, I will set up a path to a JSON file that will be used by the compiler for 
 After the build process is done, the ~/gdb-report-bugs.json file will contain all the information collected by the compiler. As a next step we want to generate the HTML out of these JSON objects:
 
     $ llvm-original-di-preservation.py ~/gdb-report-bugs.json before-the-fix.html
+
 The HTML can be found at: https://djolertrk.github.io/di-check-before-adce-fix/.
 
 After the analysis of some “Variable Location” issues, I’ve found out that the Aggressive Dead Code Elimination Pass (ADCE) drops some variable location information (more precisely, the variable “vendor” from the bfd/elf-attrs.c). After some investigation within the compiler, I’ve come up with the patch [5] that fixes that problem. The new HTML page, generated from the JSON file produced from the fixed version of the compiler, shows a reduced number of Debug Info related issues: https://djolertrk.github.io/di-check-after-adce-fix/.
