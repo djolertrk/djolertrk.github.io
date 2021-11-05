@@ -10,7 +10,7 @@ In the following content, we’ll be focusing on the AARCH64 target, which is a 
 
 Here are some problems (potentially) fixed.
 
-####	Optimize complex GEPs
+####	Optimize complex GEPs (I)
 
 There is an LLVM Pass initially implemented for the purpose of improving AARCH64 target – SeparateConstOffsetFromGEP. Its mission is to optimize complex GEP instructions. Passes such as GVN, EarlyCSE (and similar) cannot optimize similar GEPs that have common subparts, so the SeparateConstOffsetFromGEP Pass was implemented to address that issue. In general, let us consider an example from documentation.
 
@@ -52,11 +52,11 @@ As we can see the `gep %a, 0, %x, %y` is similar part here that could be optimiz
       load base + 32 * sizeof(float)
       load base + 33 * sizeof(float)
 
-Suddenly, the optimization was disabled by default for the AARCH64 (with the cd2334 commit), since “it was pessimising some code patterns”. I am not sure what were the exact cases, but the targets other than AARCH64 that use this LLVM Pass, run Straight Line Strength Reduce, GVN and Nary Reassociate Passes, before invoking the EarlyCSE, to gain full benefits out of this. Please also find the proposals for returning this into -O3 pipeline: PATCH1 PATCH2
+Suddenly, the optimization was disabled by default for the AARCH64 (with the cd2334 commit), since “it was pessimising some code patterns”. I am not sure what were the exact cases, but the targets other than AARCH64 that use this LLVM Pass, run Straight Line Strength Reduce, GVN and Nary Reassociate Passes, before invoking the EarlyCSE, to gain full benefits out of this. Please also find the proposals for returning this into -O3 pipeline: https://reviews.llvm.org/D113284, https://reviews.llvm.org/D113285
 
 This improves/fixes the problem reported at [5].
 
-####	LICM: Hoist LOAD without STORE
+####	LICM: Hoist LOAD without STORE (II)
 
 The LICM LLVM Pass performs loop invariant code motion. It means that it tries to remove as much as possible code from the loop’s body. It is done by either hoisting some invariants into loop’s preheader (it is a basic block where there is only one entering block, and its only edge is to the loop’s header; more about LLVM’s loop terminology [2]), or by sinking such code into the exit block. All this is done IFF it is safe. What does it mean? It mostly means that it is not safe to promote a load/store from the loop if the load/store is conditional.  For example:
 
@@ -68,9 +68,9 @@ representing this as:
 
 is not safe, because `*P` may only be valid to access if `c` is true.
 
-There are some safety properties that should be satisfied, but it looks like if LICM cannot sink store it does not hoist load as well, even though the memory is dereferenceable on entry to the loop. Please take a look into [3], but it looks like hoisting the load (with proper PHIs) without stores can be a good optimization (the PATCH3 is proposal for that).
+There are some safety properties that should be satisfied, but it looks like if LICM cannot sink store it does not hoist load as well, even though the memory is dereferenceable on entry to the loop. Please take a look into [3], but it looks like hoisting the load (with proper PHIs) without stores can be a good optimization (the https://reviews.llvm.org/D113289 and https://reviews.llvm.org/D113290 are proposals for this idea).
 
-####	Recognize table-based ctz
+####	Recognize table-based ctz (III)
 
 GCC (I’ve tried with the GCC 10 for the aarch64) recognizes && optimizes the table-based ctz for this case:
 
@@ -82,12 +82,27 @@ GCC (I’ve tried with the GCC 10 for the aarch64) recognizes && optimizes the t
 
 should be represented as `__builtin_ctz(x);`
 
-Please take a look into the bug report at [4]. The patch PATCH5 implementes/proposes a new LLVM Pass that implements this idea.
+Please take a look into the bug report at [4]. The patch https://reviews.llvm.org/D113291 implementes/proposes a new LLVM Pass that implements this idea.
 
 ### Conclusion && Benchmark
 
 By applying these patches, we have seen good improvements, so binaries for AARCH64 should be faster for a bit. I don't have access to any AARCH64 board to run the SPEC. I could have used the `QEMU` or the `llvm-mca` on a bigger project, but I`ll leave it for the future work.
 
+The data on small examples from bug reports showed improvements by using the llvm-mca:
+
+     $ llvm-mca -mtriple=aarch64 -mcpu=cyclone -iterations=300 store.s
+
+- for the improvements after (I) optimizations
+
+![data-cycles-llvm-mca](https://user-images.githubusercontent.com/16275603/140541450-f7115150-7301-44db-be3b-aaf40340f793.png)
+
+- for the improvements after (II) optimizations
+
+![licm-opt](https://user-images.githubusercontent.com/16275603/140541543-624fd373-4e6a-4c48-ae29-6531a89999ee.png)
+
+- for the improvements after (III) optimizations
+
+![ctz-lower-pass-implemented](https://user-images.githubusercontent.com/16275603/140541575-0e69ba24-d350-42ed-8b69-e6cf871c4bfa.png)
 
 
 [0] https://llvm.org/docs/CommandGuide/llvm-mca.html
@@ -105,4 +120,4 @@ By applying these patches, we have seen good improvements, so binaries for AARCH
 [4] https://bugs.llvm.org/show_bug.cgi?id=46434
 
 
-[5]	https://bugs.llvm.org/show_bug.cgi?id=51184
+[5] https://bugs.llvm.org/show_bug.cgi?id=51184
