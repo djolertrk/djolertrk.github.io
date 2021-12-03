@@ -105,7 +105,7 @@ The data on small examples from bug reports showed improvements by using the llv
 ![ctz-lower-pass-implemented](https://user-images.githubusercontent.com/16275603/140541575-0e69ba24-d350-42ed-8b69-e6cf871c4bfa.png)
 
 
-[0] [llvm-mca] (https://llvm.org/docs/CommandGuide/llvm-mca.html)
+[0] [llvm-mca](https://llvm.org/docs/CommandGuide/llvm-mca.html)
 
 
 [1] [Molloy-LLVM-Performant-As-GCC-llvm-dev-2014](https://llvm.org/devmtg/2014-10/Slides/Molloy-LLVM-Performant-As-GCC-llvm-dev-2014.pdf)
