@@ -52,7 +52,7 @@ As we can see the `gep %a, 0, %x, %y` is similar part here that could be optimiz
       load base + 32 * sizeof(float)
       load base + 33 * sizeof(float)
 
-Suddenly, the optimization was disabled by default for the AARCH64 (with the cd2334 commit), since “it was pessimising some code patterns”. I am not sure what were the exact cases, but the targets other than AARCH64 that use this LLVM Pass, run Straight Line Strength Reduce, GVN and Nary Reassociate Passes, before invoking the EarlyCSE, to gain full benefits out of this. Please also find the proposals for returning this into -O3 pipeline: https://reviews.llvm.org/D113284, https://reviews.llvm.org/D113285
+Suddenly, the optimization was disabled by default for the AARCH64 (with the cd2334 commit), since “it was pessimising some code patterns”. I am not sure what were the exact cases, but the targets other than AARCH64 that use this LLVM Pass, run Straight Line Strength Reduce, GVN and Nary Reassociate Passes, before invoking the EarlyCSE, to gain full benefits out of this. Please also find the proposals for returning this into -O3 pipeline: [D113284](https://reviews.llvm.org/D113284), [D113285](https://reviews.llvm.org/D113285)
 
 This improves/fixes the problem reported at [5].
 
@@ -68,7 +68,7 @@ representing this as:
 
 is not safe, because `*P` may only be valid to access if `c` is true.
 
-There are some safety properties that should be satisfied, but it looks like if LICM cannot sink store it does not hoist load as well, even though the memory is dereferenceable on entry to the loop. Please take a look into [3], but it looks like hoisting the load (with proper PHIs) without stores can be a good optimization (the https://reviews.llvm.org/D113289 and https://reviews.llvm.org/D113290 are proposals for this idea).
+There are some safety properties that should be satisfied, but it looks like if LICM cannot sink store it does not hoist load as well, even though the memory is dereferenceable on entry to the loop. Please take a look into [3], but it looks like hoisting the load (with proper PHIs) without stores can be a good optimization (the [D113289](https://reviews.llvm.org/D113289) is an implementation for this idea).
 
 ####	Recognize table-based ctz (III)
 
@@ -82,7 +82,7 @@ GCC (I’ve tried with the GCC 10 for the aarch64) recognizes && optimizes the t
 
 should be represented as `__builtin_ctz(x);`
 
-Please take a look into the bug report at [4]. The patch https://reviews.llvm.org/D113291 implementes/proposes a new LLVM Pass that implements this idea.
+Please take a look into the bug report at [4]. The patch [D113291](https://reviews.llvm.org/D113291) implementes/proposes a new LLVM Pass that implements this idea.
 
 ### Conclusion && Benchmark
 
@@ -105,19 +105,19 @@ The data on small examples from bug reports showed improvements by using the llv
 ![ctz-lower-pass-implemented](https://user-images.githubusercontent.com/16275603/140541575-0e69ba24-d350-42ed-8b69-e6cf871c4bfa.png)
 
 
-[0] https://llvm.org/docs/CommandGuide/llvm-mca.html
+[0] [llvm-mca] (https://llvm.org/docs/CommandGuide/llvm-mca.html)
 
 
-[1] https://llvm.org/devmtg/2014-10/Slides/Molloy-LLVM-Performant-As-GCC-llvm-dev-2014.pdf
+[1] [Molloy-LLVM-Performant-As-GCC-llvm-dev-2014](https://llvm.org/devmtg/2014-10/Slides/Molloy-LLVM-Performant-As-GCC-llvm-dev-2014.pdf)
 
 
-[2] https://llvm.org/docs/LoopTerminology.html
+[2] [LoopTerminology](https://llvm.org/docs/LoopTerminology.html)
 
 
-[3] https://bugs.llvm.org/show_bug.cgi?id=51193
+[3] [LLVMBUG=51193](https://bugs.llvm.org/show_bug.cgi?id=51193)
 
 
-[4] https://bugs.llvm.org/show_bug.cgi?id=46434
+[4] [LLVMBUG=46434](https://bugs.llvm.org/show_bug.cgi?id=46434)
 
 
-[5] https://bugs.llvm.org/show_bug.cgi?id=51184
+[5] [LLVMBUG=51184](https://bugs.llvm.org/show_bug.cgi?id=51184)
