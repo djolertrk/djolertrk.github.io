@@ -1,6 +1,6 @@
 ##  Debug Info in LLVM keeps improving!
 
-Everyone wants an ideal debugging user experience, that includes seeing no `optimized_out` variables during the debugging of an optimized binary. It is not an easy task for compiler developers to achive 100% coverage for all the variables, but LLVM community is doing a great job! I've been following the improvements with the respect to the location coverage over the releases [0] (not only following, I also worked on improving the Debug Info :) ) and the recent numbers look amazing. In the link I mentioned [0], we can see that LLVM 6.0 generated the binary with only 45% of PC coverage, but now LLVM 16.0.4 generates binary with 71% of PC coverage.
+Everyone wants an ideal debugging user experience, that includes seeing no `optimized_out` variables during the debugging of an optimized binary. It is not an easy task for compiler developers to achieve 100% coverage for all the variables, but LLVM community is doing a great job! I've been following the improvements with the respect to the location coverage over the LLVM releases [0] (not only following, I also worked on improving the Debug Info :) ) and the recent numbers look amazing. In the link I mentioned [0], we can see that LLVM 6.0 generated the binary with only 45% of PC coverage, but now LLVM 16.0.4 generates binary with 71% of PC coverage. Nice!
 
 First of all, let me mention that I used the `binutils-gdb` as testbed, compiled with `-g -O2`. By using the [1], the results look as:
 
