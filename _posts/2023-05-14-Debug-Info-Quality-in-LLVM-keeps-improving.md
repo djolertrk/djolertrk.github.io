@@ -64,6 +64,7 @@ First of all, let me mention that I used the `binutils-gdb` as testbed, compiled
 
 ### Compare llvm 16.0.4 vs llvm 15.0.7
 
+ ![locstats](https://github.com/djolertrk/djolertrk.github.io/assets/16275603/ecca7105-b237-4896-a670-2c415dfd0979)
 
 [0] https://djolertrk.github.io/llvm-debug-loc-stats/
 
