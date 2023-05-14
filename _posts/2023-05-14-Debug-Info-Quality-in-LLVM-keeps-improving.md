@@ -66,6 +66,6 @@ First of all, let me mention that I used the `binutils-gdb` as testbed, compiled
 
  ![locstats](https://github.com/djolertrk/djolertrk.github.io/assets/16275603/ecca7105-b237-4896-a670-2c415dfd0979)
 
-[0] https://djolertrk.github.io/llvm-debug-loc-stats/
+[0] [Debug Info Stats Report](https://djolertrk.github.io/llvm-debug-loc-stats/)
 
-[1] https://llvm.org/docs/CommandGuide/llvm-locstats.html
+[1] [llvm-locstats](https://llvm.org/docs/CommandGuide/llvm-locstats.html)
